@@ -1,0 +1,36 @@
+{% load cms_tags i18n %}
+
+<div id="modal" class="modal fade" tabindex="-1" hx-target="#modal" hx-swap="innerHTML" hx-swap-oob="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    {% block modal-content %}
+      <div id="modal-content" class="modal-content">
+        <div id="modal-header" class="modal-header">
+          {% block modal-header %}
+            {% block modal-title %}
+              <h5 id="modal-title" class="modal-title">{% page_attribute "page_title" %}</h5>
+            {% endblock modal-title %}
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          {% endblock modal-header %}
+        </div>
+        <div id="modal-body" class="modal-body">
+          {% block modal-body %}
+            {% block content %}
+            <span class="sr-only">{% trans 'Lade' %}...</span>
+            {% endblock content %}
+          {% endblock modal-body %}
+        </div>
+        <div id="modal-footer" class="modal-footer">
+          {% block modal-footer %}
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Schließen' %}</button>
+          {% endblock modal-footer %}
+        </div>
+      </div>
+    {% endblock modal-content %}
+  </div>
+    <script>
+    	{% if request.htmx %}
+    	  var modal = new bootstrap.Modal('#modal', {});
+	      modal.show();
+      	{% endif %}
+    </script>
+</div>

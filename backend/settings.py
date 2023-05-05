@@ -11,14 +11,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', '<a string of random characters>')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG') == "True"
+DEBUG = os.environ.get('DEBUG').lower() == "true"
 
 ALLOWED_HOSTS = [os.environ.get('DOMAIN'),]
 if DEBUG:
     ALLOWED_HOSTS = ["*",]
-
-# Redirect to HTTPS by default, unless explicitly disabled
-SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT') != "False"
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
@@ -60,6 +57,7 @@ INSTALLED_APPS = [
     'djangocms_style',
     'djangocms_googlemap',
     'djangocms_video',
+    'djangocms_snippet',
 
     # optional django CMS Frontend modules
     'djangocms_frontend',
@@ -78,6 +76,11 @@ INSTALLED_APPS = [
     'djangocms_frontend.contrib.image',
     'djangocms_frontend.contrib.tabs',
     'djangocms_frontend.contrib.utilities',
+
+    'django_htmx',
+    'favicon',
+    'django.contrib.sitemaps',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -95,6 +98,8 @@ MIDDLEWARE = [
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
+
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -133,14 +138,9 @@ THUMBNAIL_PROCESSORS = (
 
 
 CMS_TEMPLATES = [
-    # a minimal template to get started with
-    ('minimal.html', 'Minimal template'),
-
-    # optional templates that extend base.html, to be used with Bootstrap 5
-    ('bootstrap5.html', 'Bootstrap 5 Demo'),
-
-    # serving static files with whitenoise demo
-    ('whitenoise-static-files-demo.html', 'Static File Demo'),
+    ('htmx_base.html', 'HTMX Base Template'),
+    ('htmx_content.html', 'HTMX Content Template'),
+    ('htmx_content_slim.html', 'HTMX Content slim Template'),
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
@@ -151,8 +151,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Configure database using DATABASE_URL; fall back to sqlite in memory when no
 # environment variable is available, e.g. during Docker build
-DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite://:memory:')
-DATABASES = {'default': dj_database_url.parse(DATABASE_URL)}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db',
+        'USER': 'db',
+        'PASSWORD': 'db',
+        'HOST': 'db',
+        'PORT': '5432',
+    },
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
@@ -179,13 +187,14 @@ if not DEBUG:
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'de'
 
 LANGUAGES = [
+    ('de', 'Deutsch'),
     ('en', 'English'),
 ]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Berlin'
 
 USE_I18N = True
 
@@ -205,17 +214,17 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # DEFAULT_FILE_STORAGE is configured using DEFAULT_STORAGE_DSN
 
 # read the setting value from the environment variable
-DEFAULT_STORAGE_DSN = os.environ.get('DEFAULT_STORAGE_DSN')
+#DEFAULT_STORAGE_DSN = os.environ.get('DEFAULT_STORAGE_DSN')
 
 # dsn_configured_storage_class() requires the name of the setting
-DefaultStorageClass = dsn_configured_storage_class('DEFAULT_STORAGE_DSN')
+#DefaultStorageClass = dsn_configured_storage_class('DEFAULT_STORAGE_DSN')
 
 # Django's DEFAULT_FILE_STORAGE requires the class name
-DEFAULT_FILE_STORAGE = 'backend.settings.DefaultStorageClass'
+#DEFAULT_FILE_STORAGE = 'backend.settings.DefaultStorageClass'
 
 # only required for local file storage and serving, in development
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join('/data/media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-SITE_ID = 1
+SITE_ID = int(os.environ.get('SITE_ID', 1))

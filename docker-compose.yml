@@ -1,40 +1,77 @@
 version: "3"
 
+
+volumes:
+  django_media:
+  django_static:
+  postgres_data:
+
+
 services:
-  web:
-    # the application's web service (container) will use an image based on our Dockerfile
-    build: .
-    # map the internal port 80 to port 8000 on the host
-    ports:
-      - "8000:80"
-    # map the host directory to app (which allows us to see and edit files inside the container)
+  site_1:
+    image: docker.io/snakesoft/django-cms-htmx:${BUILD:-latest}
+    restart: unless-stopped
+    user: 1000:1000
     volumes:
-      - ".:/app:rw"
-      - "./data:/data:rw"
-    # the default command to run whenever the container is launched
-    command: python manage.py runserver 0.0.0.0:80
-    # the URL 'postgres' or 'mysql' will point to the application's db service
-    networks:
-      - djangocmsnet
+      - django_media:/app/media/:rw
+      - django_static:/app/staticfiles_collected/:rw
+    depends_on:
+      - db
+    environment:
+      SITE_ID: ${SITE_ID_1:-1}
+      DEBUG: ${DEBUG:-False}
+      DOMAIN: ${DOMAIN_1:-localhost}
+      DATABASE_URL: ${DATABASE_URL}
+    command:
+      - /bin/bash
+      - -c
+      - |
+        ./manage.py migrate
+        ./manage.py collectstatic --noinput
+        gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
+    profiles: ["all", "deploy", "upgrade", "dev"]
 
-    env_file: .env-local
-
-  database_default:
-    # Select one of the following db configurations for the database
-    image: postgres:13.5-alpine
+  web_1:
+    image: docker.io/snakesoft/djanginx:1.0
+    restart: unless-stopped
+    depends_on:
+      - site_1
+    volumes:
+      - django_media:/app/media/:ro
+      - django_static:/app/static_root/:ro
+    environment:
+      LISTEN_DOMAIN: ${DOMAIN_1:-localhost}
+      SITE_HOSTNAME: site_1
     ports:
-      - "5432:5432/tcp"  # allow your local dev env to connect to the db
+      - "${PORT_1:-80}:80"
+    profiles: ["all", "deploy", "upgrade", "dev"]
+
+  db:
+    image: postgres:15.2-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_DB: "db"
-      POSTGRES_PASSWORD: "password"
-      POSTGRES_HOST_AUTH_METHOD: "trust"
-      SERVICE_MANAGER: "fsm-postgres"
-
-    networks:
-      - djangocmsnet
-
+      POSTGRES_USER: "db"
+      POSTGRES_PASSWORD: "db"
     volumes:
-      - ".:/app:rw"
+      - postgres_data:/var/lib/postgresql/data:rw
+    profiles: ["all", "deploy", "upgrade", "dev"]
 
-networks:
-  djangocmsnet:
+  upgrader:
+    image: docker:20.10.22-git
+    restart: unless-stopped
+    depends_on:
+      - worker
+    tty: true
+    environment:
+      UPGRADE: ${UPGRADE:-false}
+      UPGRADE_CI: ${UPGRADE_CI:-false}
+      CI_USER: ${CI_USER:-snakesoft}
+      CI_REGISTRY_TOKEN: ${CI_REGISTRY_TOKEN}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /root/.ssh/:/root/.ssh/:ro
+      - .:/app:rw
+    command: /bin/sh -c "./upgrader.sh"
+    profiles: ["all", "deploy"]
+
