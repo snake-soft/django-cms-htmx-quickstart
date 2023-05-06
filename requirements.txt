@@ -206,3 +206,4 @@ django-htmx==1.14.0
 gunicorn==20.1.0
 djangocms-snippet==3.1.0
 django-favicon-plus-reloaded==1.1.5
+django-extensions==3.2.1
