@@ -60,6 +60,7 @@ services:
   upgrader:
     image: docker:20.10.22-git
     restart: unless-stopped
+    working_dir: /app
     tty: true
     environment:
       UPGRADE: ${UPGRADE:-false}
@@ -68,6 +69,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /root/.ssh/:/root/.ssh/:ro
       - .:/app:rw
-    command: /bin/sh -c "./upgrader.sh"
+    command: /bin/sh -c "/app/upgrader.sh"
     profiles: ["all", "deploy"]
 
