@@ -1,10 +1,5 @@
 #!/bin/sh
 
-if [ "$UPGRADE_CI" = true ]
-then
-	apk add python3
-fi
-
 while [ "$UPGRADE" = true ]
 do 
 	if [ "$UPGRADE_CI" = true ]
