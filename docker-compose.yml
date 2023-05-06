@@ -60,8 +60,6 @@ services:
   upgrader:
     image: docker:20.10.22-git
     restart: unless-stopped
-    depends_on:
-      - worker
     tty: true
     environment:
       UPGRADE: ${UPGRADE:-false}
