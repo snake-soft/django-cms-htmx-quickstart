@@ -4,14 +4,14 @@ RUN useradd -r -m -u 1000 -g django django
 USER django:django
 WORKDIR /app
 
-COPY ./requirements.txt .
+COPY --chown=django:django ./requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY ./requirements.override.txt .
+COPY --chown=django:django ./requirements.override.txt .
 RUN pip install -r requirements.override.txt
 
-COPY ./.bash_history /home/django/.bash_history
-COPY . /app
+COPY --chown=django:django ./.bash_history /home/django/.bash_history
+COPY --chown=django:django . /app
 
 ENV PATH="/home/django/.local/bin:${PATH}"
 ARG HASH
