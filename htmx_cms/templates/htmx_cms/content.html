@@ -4,7 +4,7 @@
 {% block content %}
   {% if request.htmx %}
     <h5 id="modal-title" class="modal-title" hx-swap-oob="true">
-      {% page_attribute "page_title" %}Title
+      {% page_attribute "page_title" %}
     </h5>
   {% endif %}
   {% placeholder "Content" %}
