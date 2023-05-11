@@ -177,10 +177,6 @@ tinycss2==1.1.1
     # via
     #   cssselect2
     #   svglib
-tomli==2.0.1
-    # via
-    #   build
-    #   pep517
 unidecode==1.1.2
     # via django-filer
 urllib3==1.25.11
