@@ -17,6 +17,7 @@ services:
       - django_static:/app/staticfiles_collected/:rw
     depends_on:
       - db
+      - cache
     environment:
       SITE_ID: ${SITE_ID_1:-1}
       DEBUG: ${DEBUG:-False}
@@ -55,6 +56,11 @@ services:
       POSTGRES_PASSWORD: "db"
     volumes:
       - postgres_data:/var/lib/postgresql/data:rw
+    profiles: ["all", "deploy", "upgrade", "dev"]
+
+  cache:
+    image: redis/redis-stack-server
+    restart: unless-stopped
     profiles: ["all", "deploy", "upgrade", "dev"]
 
   upgrader:

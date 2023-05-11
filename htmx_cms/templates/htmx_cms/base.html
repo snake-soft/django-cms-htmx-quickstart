@@ -49,5 +49,19 @@
 {% endspaceless %}{% render_block 'js' %}{% spaceless %}
     {% block end_js %}{% endblock %}
     {% block bottom_css %}{% endblock %}
+    <script>
+      {% if debug %}
+        if (typeof window.htmx !== "undefined") {
+          htmx.on("htmx:afterSettle", function(detail) {
+            if (
+              typeof window.djdt !== "undefined"
+              && detail.target instanceof HTMLBodyElement
+            ) {
+              djdt.show_toolbar();
+            }
+          });
+        }
+      {% endif %}
+    </script>
     </body>
     </html>{% endspaceless %}

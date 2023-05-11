@@ -11,7 +11,12 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
+    urlpatterns.extend(
+        static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    )
+    urlpatterns += [
+        path('__debug__/', include('debug_toolbar.urls')),
+    ]
 
 urlpatterns += [
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'cmspages': CMSSitemap}}),

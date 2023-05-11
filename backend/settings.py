@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'favicon',
     'django.contrib.sitemaps',
     'django_extensions',
+    'debug_toolbar',
     'htmx_cms.apps.HtmxCmsConfig',
 ]
 
@@ -101,6 +102,7 @@ MIDDLEWARE = [
     'cms.middleware.language.LanguageCookieMiddleware',
 
     'django_htmx.middleware.HtmxMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -228,3 +230,28 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 SITE_ID = int(os.environ.get('SITE_ID', 1))
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://cache:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+def show_toolbar_callback(request):
+    from django.conf import settings
+    return settings.DEBUG
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK' : show_toolbar_callback,
+    'RESULTS_CACHE_SIZE': 100,
+    'RENDER_PANELS': False,
+    'DISABLE_PANELS': [
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.profiling.ProfilingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]
+}
