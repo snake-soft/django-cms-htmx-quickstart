@@ -1,0 +1,10 @@
+#modal-spinner{
+    visibility: hidden;
+    transition: visibility 500ms ease-in;
+}
+.htmx-request #modal-spinner{
+    visibility: visible;
+}
+.htmx-request#modal-spinner{
+    visibility: visible;
+}

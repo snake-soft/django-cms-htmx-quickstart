@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'favicon',
     'django.contrib.sitemaps',
     'django_extensions',
+    'htmx_cms.apps.HtmxCmsConfig',
 ]
 
 MIDDLEWARE = [
@@ -138,9 +139,8 @@ THUMBNAIL_PROCESSORS = (
 
 
 CMS_TEMPLATES = [
-    ('htmx_base.html', 'HTMX Base Template'),
-    ('htmx_content.html', 'HTMX Content Template'),
-    ('htmx_content_slim.html', 'HTMX Content slim Template'),
+    ('htmx_cms/content.html', 'HTMX Template'),
+    #('htmx_cms/content.html', 'HTMX Content Template'),
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
@@ -208,7 +208,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_collected')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
 # DEFAULT_FILE_STORAGE is configured using DEFAULT_STORAGE_DSN

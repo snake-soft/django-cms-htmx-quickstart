@@ -1,0 +1,11 @@
+{% extends request.htmx|yesno:"htmx_cms/standalone.html,htmx_cms/base.html" %}
+{% load cms_tags %}
+
+{% block content %}
+  {% if request.htmx %}
+    <h5 id="modal-title" class="modal-title" hx-swap-oob="true">
+      {% page_attribute "page_title" %}Title
+    </h5>
+  {% endif %}
+  {% placeholder "Content" %}
+{% endblock %}
