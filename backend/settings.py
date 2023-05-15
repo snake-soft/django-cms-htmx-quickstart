@@ -255,3 +255,5 @@ DEBUG_TOOLBAR_CONFIG = {
         'debug_toolbar.panels.redirects.RedirectsPanel',
     ]
 }
+
+CMS_PERMISSION = True
