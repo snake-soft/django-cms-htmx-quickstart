@@ -6,7 +6,7 @@
                     {% show_menu from_level to_level extra_inactive extra_active "htmx_cms/menu/dropdown.html" "" "" child %}
                 </div>
             {% else %}
-                <a class="nav-link{% if child.selected %} active{% endif %}" href="{{ child.get_absolute_url }}"{{ hx_attribs }}><span>{{ child.get_menu_title }}</span></a>
+                <a class="nav-link{% if child.selected %} active{% endif %}" href="{{ child.get_absolute_url }}" onclick="$('.active').removeClass('active');$(this).addClass('active');"{{ hx_attribs }}><span>{{ child.get_menu_title }}</span></a>
             {% endif %}
         </li>
     {% endfor %}
