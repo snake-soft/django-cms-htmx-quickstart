@@ -3,8 +3,11 @@ function random_integer(min, max) {
   return Math.floor(Math.random() * (max - min) ) + min;
 }
 
+var jqxhr = {abort: function () {}};
 function fetch(){
-	var jqxhr = $.getJSON(random_module_url, function() {
+	jqxhr.abort();
+	$('#code-runner').html('');
+	jqxhr = $.getJSON(random_module_url, function() {
 		console.log( "success" );
 	})
 	.done(async function(json) {
@@ -30,4 +33,7 @@ function fetch(){
 
 $(document).ready(function() {
     fetch();
+});
+htmx.onLoad(function(){
+	fetch();
 });
