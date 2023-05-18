@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'htmx_cms.apps.HtmxCmsConfig',
     'random_module.apps.RandomModuleConfig',
+    'djangocms_transfer',
 ]
 
 MIDDLEWARE = [
@@ -102,8 +103,8 @@ MIDDLEWARE = [
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
 
-    'django_htmx.middleware.HtmxMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
