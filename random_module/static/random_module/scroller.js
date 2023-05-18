@@ -11,6 +11,7 @@ function fetch(){
 		await new Promise(resolve => setTimeout(resolve, 500));
 		$("#django-class").html(json.classpath);
 		$('#running-program').prop('title', json.size + ' bytes');
+		new bootstrap.Tooltip($('#running-program'));
 
 		for (char of json.data){
 			if (char == ' '){
