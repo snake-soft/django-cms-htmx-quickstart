@@ -21,7 +21,7 @@ function fetch(){
 		    $('#code-runner').append(char);
 		    if (char == '\n' || true){
 		      var code_so_far = $('#code-runner').text();
-		      code_so_far = hljs.highlight('python', code_so_far).value
+		      code_so_far = hljs.highlight(code_so_far, {language: 'python'}).value
 		      $('#code-runner').html(code_so_far);
 		    }
 		}
