@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'htmx_cms.apps.HtmxCmsConfig',
     'random_module.apps.RandomModuleConfig',
     'djangocms_transfer',
+    'djangocms_history',
 ]
 
 MIDDLEWARE = [
