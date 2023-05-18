@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'htmx_cms.apps.HtmxCmsConfig',
+    'random_module.apps.RandomModuleConfig',
 ]
 
 MIDDLEWARE = [

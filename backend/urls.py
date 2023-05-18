@@ -21,6 +21,7 @@ if settings.DEBUG:
 urlpatterns += [
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'cmspages': CMSSitemap}}),
     path('', include('cms.urls')),
+    path('random-module', include('random_module.urls')),
 ]
 
 # the new django admin sidebar is bad UX in django CMS custom admin views.

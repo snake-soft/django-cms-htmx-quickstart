@@ -1,0 +1,10 @@
+{% load static %}
+<script>const random_module_url = "{% url 'random-module' %}"</script>
+<script defer src="{% static 'highlight/11.7.0/highlight.min.js' %}"></script>
+<script defer src="{% static 'random_module/scroller.js' %}?ver=1"></script>
+<link href="{% static 'highlight/11.7.0/styles/default.min.css' %}" rel="stylesheet">
+
+<div id="code-runner" 
+  class="p-1 w-100 align-text-bottom align-bottom" 
+  style="white-space:pre-wrap;overflow:hidden;">
+</div>
