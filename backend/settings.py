@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'random_module.apps.RandomModuleConfig',
     'djangocms_transfer',
     'djangocms_history',
+    'django.contrib.redirects'
 ]
 
 MIDDLEWARE = [
@@ -104,6 +105,7 @@ MIDDLEWARE = [
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
 
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
 ]
