@@ -7,7 +7,7 @@
       $('.nav-link').each(function(index, element) {
     	  var el = $(element);
     	  var el_id = el.data('id');
-    	  var anchor_id = 'anchor-' + el_id;
+    	  var anchor_id = el_id;
     	  if(document.getElementById(anchor_id) !== null)
     	  {
             el.replaceWith('<a class="nav-link d-inline-block" href="/#' + anchor_id + '">' + el.html() + '</a> ');
