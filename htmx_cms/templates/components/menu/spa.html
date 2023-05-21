@@ -1,0 +1,25 @@
+{% with hx_attribs=' hx-target="#modal-body" hx-swap="innerHTML" hx-push-url="false" hx-boost="true" hx-indicator="#modal-spinner" onclick="modal.show();"' %}
+  {% include 'htmx_cms/menu/navbar.html' %}
+{% endwith %}
+
+<script>
+  function create_anchor_links() {
+      $('.nav-link').each(function(index, element) {
+    	  var el = $(element);
+    	  var el_id = el.data('id');
+    	  var anchor_id = 'anchor-' + el_id;
+    	  if(document.getElementById(anchor_id) !== null)
+    	  {
+            el.replaceWith('<a class="nav-link d-inline-block" href="/#' + anchor_id + '">' + el.html() + '</a> ');
+    	  }else{
+  		  	{% if debug %}
+    		  console.log('No anchor with id ' + anchor_id + ' from ' + el.html());
+  		  	{% endif %}
+    	  }
+      })
+  }
+
+  htmx.onLoad(function(elt){
+	  create_anchor_links();
+  })
+</script>
