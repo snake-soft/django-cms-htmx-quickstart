@@ -1,0 +1,7 @@
+{% load cms_tags %}
+
+{% if not request.htmx %}
+  {% for plugin in instance.child_plugin_instances %}
+    {% render_plugin plugin %}
+  {% endfor %}
+{% endif %}
