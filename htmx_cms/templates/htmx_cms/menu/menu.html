@@ -1,7 +1,7 @@
 {% load i18n menu_tags cache %}{% spaceless %}
     {% for child in children %}
         <li class="nav-item text-center {% if child.ancestor %}ancestor{% endif %}{% if child.children %} dropdown{% endif %}">
-            <a class="nav-link d-inline-block{% if child.selected %} active{% endif %}" href="{{ child.get_absolute_url }}" data-id="{{ child.id }}" {{ hx_attribs }}><span>{{ child.get_menu_title|safe }}</span></a>
+            <a class="nav-link d-inline-block{% if child.selected %} active{% endif %}" href="{{ child.get_absolute_url }}" data-id="{{ child.id }}" {% if forloop.counter0 %}{{ hx_attribs }}{% endif %}><span>{{ child.get_menu_title|safe }}</span></a>
             {% if child.children %}
               <a class="nav-link d-inline-block dropdown-toggle" role="button" data-bs-toggle="dropdown" href="{{ child.get_absolute_url }}" id="menu-{{ child.id|safe }}"></a>
                 <div class="dropdown-menu" aria-labelledby="menu-{{ child.ancestor.id|safe }}">
