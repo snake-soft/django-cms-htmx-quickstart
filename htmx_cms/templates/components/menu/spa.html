@@ -12,7 +12,7 @@
     	  {
             el.replaceWith('<a class="nav-link d-inline-block" href="/#' + anchor_id + '">' + el.html() + '</a> ');
     	  }else{
-  		  	{% if debug %}
+  		  	{% if debug or True %}
     		  console.log('No anchor with id ' + anchor_id + ' from ' + el.html());
   		  	{% endif %}
     	  }
