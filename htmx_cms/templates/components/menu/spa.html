@@ -6,7 +6,7 @@
   function create_anchor_links() {
       $('.nav-link').each(function(index, element) {
     	  var el = $(element);
-    	  var el_id = el.data('id');
+    	  var el_id = el.data('reverse-id');
     	  var anchor_id = el_id;
     	  if(document.getElementById(anchor_id) !== null)
     	  {

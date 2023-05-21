@@ -3,5 +3,5 @@
     {% if child.get_menu_title|first == ' ' %}
         <div class="dropdown-divider"></div>
     {% endif %}
-    <a class="dropdown-item" href="{{ child.get_absolute_url }}"{% if child.attr.reverse_id %} data-id="{{ child.attr.reverse_id }}"{% endif%}{{ hx_attribs }}><span>{{ child.get_menu_title|safe }}</span></a>
+    <a class="dropdown-item" href="{{ child.get_absolute_url }}"{% if child.attr.reverse_id %} data-reverse-id="{{ child.attr.reverse_id }}"{% endif%}{{ hx_attribs }}><span>{{ child.get_menu_title|safe }}</span></a>
 {% endfor %}
