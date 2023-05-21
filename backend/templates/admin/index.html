@@ -1,0 +1,28 @@
+{% extends 'admin/index.html' %}
+{% load i18n %}
+
+{% block content %}
+<div id="content-main">
+  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+  <table>
+    <tbody>
+      <tr>
+        <th>{% trans 'Gestartet' %}:</th>
+        <td>{{ system__started }}</td>
+      </tr>
+      <tr>
+        <th>{% trans 'Version' %}:</th>
+        <td>{{ system__version }}</td>
+      </tr>
+      <tr>
+        <th>{% trans 'Commit Id' %}:</th>
+        <td>{{ system__commit_id }}</td>
+      </tr>
+      <tr>
+        <th>{% trans 'Free Space' %}:</th>
+        <td>{{ system__df }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}

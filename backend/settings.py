@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import dj_database_url
 from django_storage_url import dsn_configured_storage_class
+from django.utils.timezone import now
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -130,7 +131,7 @@ TEMPLATES = [
 
                 'cms.context_processors.cms_settings',
                 'sekizai.context_processors.sekizai',
-
+                'htmx_cms.context_processors.system_statistics',
             ],
         },
     },
@@ -262,3 +263,4 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 CMS_PERMISSION = True
+TIMESTAMP = now()
