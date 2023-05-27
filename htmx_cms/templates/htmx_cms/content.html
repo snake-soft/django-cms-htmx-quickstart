@@ -3,9 +3,9 @@
 
 {% block content %}
   {% if request.htmx %}
-    <h5 id="modal-title" class="modal-title" hx-swap-oob="true">
+    <h1 id="modal-title" class="modal-title" hx-swap-oob="true">
       {% page_attribute "page_title" %}
-    </h5>
+    </h1>
     {% static_placeholder "Header" %}
   {% endif %}
   {% placeholder "Content" %}
