@@ -6,6 +6,10 @@ from django.urls import re_path as url
 from django.contrib.sitemaps.views import sitemap
 from cms.sitemaps import CMSSitemap
 
+
+CMSSitemap.protocol = 'https'
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
