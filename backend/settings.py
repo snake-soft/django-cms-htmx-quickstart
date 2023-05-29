@@ -87,7 +87,8 @@ INSTALLED_APPS = [
     'random_module.apps.RandomModuleConfig',
     'djangocms_transfer',
     'djangocms_history',
-    'django.contrib.redirects'
+    'django.contrib.redirects',
+    'cookie_consent',
 ]
 
 MIDDLEWARE = [
