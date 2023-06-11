@@ -1,4 +1,4 @@
-<!DOCTYPE html>{% load cms_tags menu_tags sekizai_tags static i18n favtags django_htmx cookie_consent_tags %}{% spaceless %}
+<!DOCTYPE html>{% load cms_tags menu_tags sekizai_tags static i18n favtags %}{% spaceless %}
     <html lang="{{ LANGUAGE_CODE }}">
         <head>
             <meta charset="utf-8"/>
@@ -11,20 +11,16 @@
                 <meta property="og:description" content="{% page_attribute meta_description %}"/>
             {% endblock meta %}
             {% block canonical_url %}
-                <link rel="canonical" href="https://{{ request.site.domain }}{{ request.path }}"/>
+                <link rel="canonical" href="{{ request.build_absolute_uri }}"/>
                 <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
             {% endblock canonical_url %}
             {% block fb_meta %}{% endblock fb_meta %}
             <title>{% block title %}{% page_attribute "page_title" %}{% endblock %}</title>
-            <meta name="author" content="{% page_attribute "changed_by" %}">
             {% place_favicon %}
             <script src="{% static 'htmx/1.9.2/htmx.min.js' %}"></script>
             <script src="{% static 'jquery/3.6.4/jquery-3.6.4.min.js' %}"></script>
             <link href="{% static 'bootstrap/5.2.3/bootstrap.min.css' %}" rel="stylesheet">
             <script src="{% static 'bootstrap/5.2.3/bootstrap.bundle.min.js' %}"></script>
-            {% if debug %}
-              <script src="https://unpkg.com/htmx.org/dist/ext/debug.js"></script>
-            {% endif %}
             <link href="{% static 'fonts/fontawesome/6.4.0/css/fontawesome.min.css' %}" rel="stylesheet">
             <link href="{% static 'fonts/fontawesome/6.4.0/css/brands.min.css' %}" rel="stylesheet">
             <link href="{% static 'fonts/fontawesome/6.4.0/css/regular.min.css' %}" rel="stylesheet">
@@ -34,25 +30,20 @@
 {% endspaceless %}{% render_block 'css' %}{% spaceless %}
     {% block page_head %}{% endblock %}
     {% static_placeholder "Head" %}
-    <script type="text/javascript" src="{% static 'cookie_consent/cookiebar.js' %}"></script>
     </head>
     <body 
         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
         {% block body_attrs %}{% endblock %} 
         >
 {% endspaceless %}{% cms_toolbar %}{% spaceless %}
-    {% if debug %}
-      {% django_htmx_script %}
-    {% endif %}
+
     {% static_placeholder "Header" %}
     <div id="content">
       {% block content %}
         {% placeholder "Content" %}
       {% endblock content %}
     </div>
-    <div>
     {% static_placeholder "Footer" %}
-    </div>
 
     {% include 'htmx_cms/modal.html' %}
     {% comment %}<div id="modal" class="modal fade" tabindex="-1"></div>{% endcomment %}
@@ -76,108 +67,5 @@
         }
       {% endif %}
     </script>
-    
-    
-        <style type="text/css" media="screen">
-      body.with-cookie-bar {
-        padding-top: 35px;
-      }
-      .cookie-bar {
-        position: fixed;
-        width: 100%;
-        top:0;
-        text-align:center;
-        height:25px;
-        line-height: 25px;
-        background: #eee;
-      }
-    </style>
-    <h1>Test page</h1>
-
-    <h2>
-      Social cookies
-    </h2>
-    <p>
-      sharing button is displayed below only if "Social" cookies are accepted.
-    </p>
-    <div class="share-gplus"><g:plusone size="small" count="false"></g:plusone></div>
-
-    <h2>Optional cookies</h2>
-    {% if request|cookie_group_accepted:"optional" %}
-      <p>
-        "optional" cookies accepted
-      </p>
-    {% elif request|cookie_group_declined:"optional" %}
-      <p>
-        "optional" cookies declined
-      </p>
-    {% else %}
-      <p>
-        "optional" cookies not accepted or declined
-      </p>
-    {% endif %}
-
-    {# not existing cookie group #}
-    {% if request|cookie_group_accepted:"foo=*:.foo.com" %}
-      <p>
-        None existing cookies
-      </p>
-    {% endif %}
-
-    <p>
-      <a href="{% url "cookie_consent_cookie_group_list" %}">Cookies policy</a>
-    </p>
-
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
-    <script type="text/javascript" src={% static "cookie_consent/cookiebar.js" %}></script>
-
-    <script type="{% js_type_for_cookie_consent request "social" "*:.google.com" %}" data-varname="social">
-      (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/plusone.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
-    </script>
-
-
-    {% if request|cookie_consent_enabled %}
-      {% not_accepted_or_declined_cookie_groups request as cookie_groups %}
-
-      {% if cookie_groups %}
-        {% url "cookie_consent_cookie_group_list" as url_cookies %}
-        {% cookie_consent_accept_url cookie_groups as url_accept %}
-        {% cookie_consent_decline_url cookie_groups as url_decline %}
-        <script type="text/javascript">
-          var cookie_groups = [];
-          {% for cookie_group in cookie_groups %}
-            cookie_groups.push("{{ cookie_group.varname }}");
-          {% endfor %}
-
-          function ready(fn) {
-            if (document.readyState != 'loading') {
-              fn();
-            } else if (document.addEventListener) {
-              document.addEventListener('DOMContentLoaded', fn);
-            } else {
-              document.attachEvent('onreadystatechange', function() {
-              if (document.readyState != 'loading')
-                fn();
-              });
-            }
-          }
-
-          ready(function() {
-            showCookieBar({
-              content: "{% filter escapejs %}{% with cookie_groups=cookie_groups|join:", " %}<div class="cookie-bar">This site uses {{ cookie_groups }} cookies for better performance and user experience. Do you agree to use cookies? <a href="{{ url_accept }}" class="cc-cookie-accept">Accept</a> <a href="{{ url_decline }}" class="cc-cookie-decline">Decline</a> <a href="{{ url_cookies }}">Cookies info</a></div>{% endwith %}{% endfilter %}",
-              cookie_groups: cookie_groups,
-              cookie_decline: "{% get_decline_cookie_groups_cookie_string request cookie_groups %}",
-              beforeDeclined: function() {
-                document.cookie = "{% get_decline_cookie_groups_cookie_string request cookie_groups %}";
-              }
-            });
-          });
-        </script>
-      {% endif %}
-    {% endif %}
     </body>
     </html>{% endspaceless %}
