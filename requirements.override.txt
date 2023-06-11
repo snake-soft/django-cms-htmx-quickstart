@@ -7,4 +7,3 @@ django-debug-toolbar==4.1.0
 django-redis==5.2.0
 djangocms-transfer==1.0.1
 djangocms-history==2.1.0
-django-cookie-consent==0.3.1
